@@ -70,8 +70,10 @@ namespace FFMpegTest
 
             Directory.CreateDirectory(ffmpegDirectory);
 
+            string mediaDirectory = Path.Combine(Android.OS.Environment.ExternalStorageDirectory.AbsolutePath, "FFMpegTest");
 
-            string mediaDirectory = Path.Combine(Android.OS.Environment.ExternalStorageDirectory.AbsolutePath, "/FFMpegTest");
+            Directory.CreateDirectory(mediaDirectory);
+
             string videoFileName = "test.mp4";
             string videoFileFullName = Path.Combine(mediaDirectory, videoFileName);
 
@@ -81,7 +83,16 @@ namespace FFMpegTest
             CheckAndSetExecutable(FFmpeg.ExecutablesPath, FFmpeg.FFmpegExecutableName);
             CheckAndSetExecutable(FFmpeg.ExecutablesPath, FFmpeg.FFprobeExecutableName);
 
-            IMediaInfo videoMediaInfo = await MediaInfo.Get(videoFileFullName);
+            if (File.Exists(videoFileFullName))
+            {
+                IMediaInfo videoMediaInfo = await MediaInfo.Get(videoFileFullName);
+            }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine("File doesn't exists.");
+            }
+
+            
             return true;
 
         }
